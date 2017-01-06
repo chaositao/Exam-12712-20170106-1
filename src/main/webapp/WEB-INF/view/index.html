@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>分页</title>
+<meta charset="UTF-8"/>
+<link rel="stylesheet"
+	href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div>
+			<div class="form-horizontal" role="form">
+				<div class="form-group col-sm-4">
+					<label for="title" class="col-sm-4 control-label">title</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="title"
+							placeholder="请输入title" />
+					</div>
+				</div>
+				<div class="form-group col-sm-4">
+					<label for="description" class="col-sm-4 control-label">description</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="description"
+							placeholder="请输入description" />
+					</div>
+				</div>
+				<div class="form-group col-sm-4">
+					<div class="col-sm-10 text-right">
+						<button id="queryByName" class="btn btn-primary">查询</button>
+						<button id="addFilm" data-toggle='modal' data-target='#myModal1' class="btn btn-success">新增</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="filmTable" class="table table-striped">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>title</th>
+					<th>description</th>
+					<th>language</th>
+					<th width="150">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+		
+		<div class="row">
+			<ul  class="pagination col-sm-4" id="pagination" style="margin:0 auto;margin-left: 20%;">
+			 	<li><a href="javascript:void(0);">&lt;&lt;</a></li>
+            	<li><a href="javascript:void(0);">&gt;&gt;</a></li>
+			</ul>
+			<div class="col-sm-1">
+           	 	<select id="pageSize" class="form-control">
+              	  <option value="10">10</option>
+              	  <option value="20">20</option>
+              	  <option value="50">50</option>
+            	</select>
+        	</div>
+        	<div class="col-sm-1">
+           	 	<input id="page" type="number" class="form-control" min="1">
+        	</div>
+        	<div class="col-sm-1">
+        		<button id="go" class="btn btn-primary">跳转</button>
+        	</div>
+        	<div class="col-sm-2" style="height:34px;line-height: 34px">
+        		<span id="totalPage"></span>
+        	</div>
+        </div>
+	</div>
+
+	<!-- 编辑 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">编辑页面</h4>
+				</div>
+				<div class="modal-body" style="height: 180px">
+					<div class="form-horizontal" role="form">
+						<input type="hidden" class="form-control" id="doid" />
+						<input type="hidden" class="form-control"id="refilmId" />
+						<div class="form-group col-sm-10">
+							<label for="retitle" class="col-sm-4 control-label">title</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="retitle" />
+							</div>
+						</div>
+						<div class="form-group col-sm-10">
+							<label for="redescription" class="col-sm-4 control-label">description</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="redescription" />
+							</div>
+						</div>
+						<div class="form-group col-sm-10">
+							<label for="relanguageId" class="col-sm-4 control-label">language</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="relanguageId">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button id="edit" type="button" class="btn btn-primary">提交更改</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--新增-->
+	
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel1">新增页面</h4>
+				</div>
+				<div class="modal-body" style="height: 180px">
+					<div class="form-horizontal" role="form">
+						<div class="form-group col-sm-10">
+							<label for="newtitle" class="col-sm-4 control-label">title</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="newtitle" />
+							</div>
+						</div>
+						<div class="form-group col-sm-10">
+							<label for="newdescription" class="col-sm-4 control-label">description</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="newdescription" />
+							</div>
+						</div>
+						<div class="form-group col-sm-10">
+							<label for="newlanguageId" class="col-sm-4 control-label">language</label>
+							<div class="col-sm-8">
+								<select class="form-control" id="newlanguageId">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button id="add" type="button" class="btn btn-primary">确认添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	<script id="rowTemplate" type="application/html">
+        <tr>
+            <td></td><td></td><td></td><td></td><td></td>
+        </tr>
+    </script>
+
+	<script type="text/javascript">
+	//初始化全局变量 当前页数
+	var page="";
+	//初始化全局变量 总页数
+	var total="";
+	//初始化全局变量 标题
+	var title="";
+	//初始化全局变量 描述
+	var description="";
+	//初始化全局变量 pageSize
+	var pageSize=10;
+	
+	//页面加载时触发
+	  $('document').ready(function () {
+		  page=1;
+		  query({
+			  title:title,
+			  description:description,
+			  page:1,
+			  pageSize:10
+		  });
+	  });
+	
+	  //查询,并将数据绑定到表格
+	  function query(queryInfo){
+		  var defaultArg={
+				  title:title,
+				  description:description,
+				  page:page,
+				  pageSize:$('#pageSize').val()
+		  };
+		  queryInfo = $.extend({}, defaultArg, queryInfo);
+	    	$.ajax({
+	        url: "film/query",
+	        type: "GET",
+	        dataType: "json",
+	        data:queryInfo,
+	        success: function (data) {
+	        	total=data.total;
+	            $('#filmTable tbody').empty();
+	            for (var item of data.rows) {
+	                var $template = $($('#rowTemplate').html()).clone();
+	                $template.children('td').eq(0).text(item.filmId);
+	                $template.children('td').eq(1).text(item.title);
+	                $template.children('td').eq(2).text(item.description);
+	                $template.children('td').eq(3).text(item.name);
+	                $template.children('td').eq(4).append("<button id=u"+item.filmId+" onclick='toEdit(this)' data-toggle='modal' data-target='#myModal' class='btn btn-warning'>编辑</button><button id=d"+item.filmId+" style='margin-left:10px' onclick='del(this)' class='btn btn-danger'>删除</button>");;
+	                $('#filmTable').append($template); 
+	            }
+	            showPager();
+	            $('#totalPage').text('第'+page+'页/共'+total+'页');
+	   		 }
+		 });
+	  };
+	
+	  
+		 function showPager(){
+			 $('#pager').empty();
+			 $('#pagination').children('li.page').remove();
+			 var pages = [];
+	            if (total - page < 2) {
+	                pages = range(Math.max(1,total-4),total)
+	            } else if (page -1 < 2) {
+	                pages = range(1, Math.min(total,5))
+	            } else {
+	                pages =  range(Number(page)-2,Number(page)+2);
+	            }
+	            var template = "<li class='page'><a href='javascript:void(0);'></a></li>"
+	            for (var item of pages) {
+	                var $first = $("#pagination").children('li:last');
+	                var $template = $(template);
+	                $template.children('a').text(item);
+	                if (item == page) {
+	                    $template.addClass('active');
+	                }
+	                $first.before($template);
+	            }
+	            $("#pagination").children('li:first').removeClass('disabled');
+	            $('#pagination').children('li:last').removeClass('disabled');
+	            if (page == 1) {
+	                $("#pagination").children('li:first').addClass('disabled');
+	            }
+	            if (page == total) {
+	                $("#pagination").children('li:last').addClass('disabled');
+	            }
+
+	            $("#pagination li.page").click(function(event) {
+	                page = Number($(event.target).text());
+	                query(page)
+	            });
+		 };
+		 
+		 function range(min,max) {
+	            var arr = [];
+	            for (var i=min ;i <= max; i++) {
+	                arr.push(i);
+	            }
+	            return arr;
+	     }
+		 
+		 $('#pagination').children('li:first').click(function() {
+             if(page>1){
+            	 page = page-1;
+            	 query(page);
+             }
+         });
+
+         $('#pagination').children('li:last').click(function() {
+             if(page<total){
+            	page = page+1;
+                query(page);
+             }
+         });
+         
+       //选择每页显示的数据数量
+			$('#pageSize').bind("change",function(){
+				pageSize=$(this).val()*1;
+				page=1;
+			    query({
+					  title:title,
+					  description:description,
+					  page:page,
+					  pageSize:pageSize
+				});
+		    }); 
+			
+			//页面的跳转
+			$('#go').click(function(){
+				var pageInputVal=$('#page').val()*1;
+				if(/^\d+$/.test(pageInputVal)&&pageInputVal>=1&&pageInputVal<=total){
+					page=$('#page').val()*1;
+					query({
+						page:page,
+						title:title,
+						description:description,
+						pageSize:$('#pageSize').val()
+					});
+				}else{
+					alert("不合法的页数")
+				}
+			});
+	
+	
+	
+	//更具标题和描述查询数据
+	 $('#queryByName').click(function(){
+		page=1;
+		title=$('#title').val();
+		description=$('#description').val()
+		query({
+			page:page,
+			title:title,
+			description:description,
+			pageSize:pageSize
+		});
+	})
+	 
+	 //将需要编辑行的数据绑定到弹出编辑框
+	function toEdit(obj){
+		 $.ajax({
+			 url:"language",
+			 type: "GET",
+		     dataType: "json",
+		     success:function(data){
+		    	 $('#relanguageId').empty();
+		    	for(var item of data.rows){
+		    		$('#relanguageId').append("<option value="+item.languageId+">"+item.name+"</option>");
+		    	}
+		    	$("#relanguageId").find("option:selected").text(tds[3].innerText);
+		     }
+		 });
+		var tds=$("#"+obj.id+"").parent().parent().children();
+		$('#doid').val(obj.id);
+		$('#refilmId').val(tds[0].innerText);
+		$('#retitle').val(tds[1].innerText);
+		$('#redescription').val(tds[2].innerText);
+	}
+	
+	 //删除该行数据
+	function del(obj){
+		 if(confirm('确定要执行此操作吗?')) 
+		    { 
+				var id=obj.id.substring(1);
+				$.ajax({
+					url: "film/del",
+			        type: "GET",
+			        dataType: "json",
+			        contentType: "application/json",
+			        data:{
+			        	filmId:id
+			        },
+			        success: function (data) {
+			        	$("#"+obj.id+"").parent().parent().remove();
+			        },
+			        error:function (XMLHttpRequest, textStatus, errorThrown){ 
+				    	  alert("删除失败:"+textStatus);
+				     }
+				});
+		    } 
+	   return false; 
+	}
+	 //编辑
+	 $('#edit').click(function(){
+		 editInfo={
+			 filmId:$('#refilmId').val(),
+			 title:$('#retitle').val(),
+			 description:$('#redescription').val(),
+			 languageId:$('#relanguageId').val()
+		 }
+		 $.ajax({
+			 url: "film/update",
+			 type: "GET",
+		     dataType: "json",
+		     contentType: "application/json",
+		     data:editInfo,
+		     success:function(data){
+		    	 var tds=$("#"+$('#doid').val()+"").parent().parent().children();
+		    	 tds[0].innerText=$('#refilmId').val();
+		    	 tds[1].innerText=$('#retitle').val();
+		    	 tds[2].innerText=$('#redescription').val();
+		    	 tds[3].innerText=$("#relanguageId").find("option:selected").text();
+		    	 $("#myModal").modal("hide");
+		     },
+		     error:function (XMLHttpRequest, textStatus, errorThrown){ 
+		    	  alert("更新失败:"+textStatus);
+		     }
+		 });
+	 });
+	 
+	 //添加按钮触发查询语言
+	 $('#addFilm').click(function(){
+		 $.ajax({
+			 url:"language",
+			 type: "GET",
+		     dataType: "json",
+		     success:function(data){
+		    	 $('#newlanguageId').empty();
+		    	for(var item of data.rows){
+		    		$('#newlanguageId').append("<option value="+item.languageId+">"+item.name+"</option>");
+		    	}
+		     }
+		 });
+	 });
+	 
+	 //添加
+	 $('#add').click(function(){
+		 if($('#newtitle').val()==""){
+			 alert("标题不能为空");
+		 }else if($('#newlanguageId').val()==""){
+			 alert("语言不能为空");
+		 }else{
+			 addInfo={
+				title:$('#newtitle').val(),
+				description:$('#newdescription').val(),
+				languageId:$('#newlanguageId').val(),
+			 }
+			 $.ajax({
+				 url: "film/add",
+				 type: "GET",
+			     dataType: "json",
+			     contentType: "application/json",
+			     data:addInfo,
+			     success:function(data){
+			    	 page=1;
+			    	 query({
+			 			page:page,
+			 			title:title,
+			 			description:description,
+			 			pageSize:pageSize
+			 		 });
+			    	 $("#myModal1").modal("hide");
+			    	 $('#newtitle').val("");
+			    	 $('#newdescription').val("");
+			    	 $('#newlanguageId').val(1);
+			     },
+			     error:function (XMLHttpRequest, textStatus, errorThrown){ 
+			    	  alert("添加失败:"+textStatus);
+			     } 
+			 });
+			 
+		 }
+	 });
+    </script>
+</body>
+</html>

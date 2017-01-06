@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cst.mapper.FilmMapper">
+	<resultMap type="Film" id="FilmMap">
+		<id property="filmId" column="film_id" />
+		<result property="title" column="title" />
+		<result property="description" column="description" />
+		<result property="languageId" column="language_id" />
+	</resultMap>
+
+	<select id="query" resultMap="FilmMap">
+		SELECT f.film_id,f.title,f.description,f.language_id,l.name FROM film f,language l WHERE 1=1
+		AND f.language_id=l.language_id
+		AND
+		f.title like concat('%',#{entity.title},'%')
+		AND 
+		f.description like concat('%',#{entity.description},'%')
+		limit
+		#{offset},#{pageSize}
+	</select>
+
+	<select id="queryCount" resultType="int">
+		SELECT count(1) FROM film
+		WHERE 1=1
+		AND title like concat('%',#{entity.title},'%')
+		AND description
+		like concat('%',#{entity.description},'%')
+	</select>
+	
+	<delete id="del" parameterType="int">
+		DELETE FROM film WHERE film_id = #{filmId}
+	</delete>
+	
+	<update id="update">
+		UPDATE film 
+		<set>
+			<if test="title !=null">
+				title=#{title},
+			</if>
+			<if test="description !=null">
+				description=#{description},
+			</if>
+			<if test="languageId !=null">
+				language_id=#{languageId}
+			</if>
+		</set>
+		<where>
+			film_id=#{filmId}
+		</where>
+	</update>
+	
+	<insert id="add">
+		INSERT INTO film (title,description,language_id) VALUES(#{title},#{description},#{languageId})
+	</insert>
+</mapper>
